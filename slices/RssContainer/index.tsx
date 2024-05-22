@@ -4,17 +4,17 @@
 import React, { useEffect, useState } from 'react';
 import { SliceComponentProps } from "@prismicio/react";
 import axios from 'axios';
+import styles from './RssContainer.module.css';
 
 const RssContainer = ({ slice }: SliceComponentProps<any>): JSX.Element => {
-  const [episodes, setEpisodes] = useState([]);
+  const [podcastInfo, setPodcastInfo] = useState(null);
   const feedUrl = "https://pa.tedcdn.com/feeds/talks.rss?type=audio"; // URL for the RSS feed
 
   useEffect(() => {
     const fetchRssFeed = async () => {
       try {
-        // Here, you call your local API route which in turn fetches the RSS feed
         const response = await axios.get('/api/rss', { params: { url: feedUrl } });
-        setEpisodes(response.data.items);
+        setPodcastInfo(response.data);
       } catch (error) {
         console.error('Error fetching RSS feed:', error);
       }
@@ -23,15 +23,25 @@ const RssContainer = ({ slice }: SliceComponentProps<any>): JSX.Element => {
     fetchRssFeed();
   }, []);
 
+  if (!podcastInfo) return <div>Loading...</div>;
+
   return (
-    <section>
-      <h1>TED Talks Audio</h1>
-      {episodes.map((episode, index) => (
-        <div key={index}>
+    <section className={styles.podcastContainer}>
+      <h1 className={styles.title}>{podcastInfo.title}</h1>
+      <img src={podcastInfo.image.url} alt="Podcast cover" className={styles.coverImage} />
+      <div dangerouslySetInnerHTML={{ __html: podcastInfo.description }} />
+      {podcastInfo.items.map((episode, index) => (
+        <div key={index} className={styles.episode}>
           <h2>{episode.title}</h2>
-          <audio controls src={episode.enclosure.url}>
+          {podcastInfo.image && podcastInfo.image.url && (
+            <img src={podcastInfo.image.url} alt="Podcast cover" className={styles.episodeImage} />
+          )}
+          <audio controls src={episode.enclosure.url} className={styles.audioPlayer}>
             Your browser does not support the audio element.
           </audio>
+          <div dangerouslySetInnerHTML={{ __html: episode.description }} />
+          <p className={styles.details}><strong>Published on:</strong> {new Date(episode.pubDate).toLocaleDateString()}</p>
+          <p className={styles.details}><strong>Duration:</strong> {episode['itunes:duration']}</p>
         </div>
       ))}
     </section>
