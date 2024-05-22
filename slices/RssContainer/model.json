@@ -1,0 +1,16 @@
+{
+  "id": "rss_container",
+  "type": "SharedSlice",
+  "name": "RssContainer",
+  "description": "RssContainer",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": ""
+    }
+  ]
+}

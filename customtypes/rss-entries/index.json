@@ -1,0 +1,30 @@
+{
+  "id": "rss-entries",
+  "label": "rss-entries",
+  "repeatable": true,
+  "json": {
+    "Main": {},
+    "feeds": {
+      "body": {
+        "type": "Slices",
+        "fieldset": "Slice zone",
+        "config": {
+          "labels": null,
+          "choices": {
+            "rss_feed": {
+              "type": "Slice",
+              "fieldset": "RSS Feed",
+              "description": "These are the latest podcasts",
+              "icon": "bluetooth",
+              "display": "list",
+              "non-repeat": {},
+              "repeat": {}
+            }
+          }
+        }
+      }
+    }
+  },
+  "status": true,
+  "format": "custom"
+}
